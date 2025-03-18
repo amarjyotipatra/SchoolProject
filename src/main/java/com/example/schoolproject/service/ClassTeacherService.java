@@ -22,6 +22,12 @@ public class ClassTeacherService {
                 .map(this::convertToDTO);
     }
 
+    @Cacheable(value = "classTeachers", key = "#id")
+    public Optional<ClassTeacherDTO> findById(Long id) { // New method
+        return classTeacherRepository.findById(id)
+                .map(this::convertToDTO);
+    }
+
     @CachePut(value = "classTeachers", key = "#result.userName")
     public ClassTeacherDTO saveClassTeacher(ClassTeacherDTO classTeacherDTO) {
         ClassTeacher classTeacher = convertToEntity(classTeacherDTO);

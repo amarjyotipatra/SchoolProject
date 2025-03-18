@@ -22,8 +22,17 @@ public class ChildService {
                 .map(this::convertToDTO);
     }
 
+    @Cacheable(value = "children", key = "#userName")
+    public Optional<Child> findChildByUserName(String userName) { // New method
+        return childRepository.findByUserName(userName);
+    }
+
     @CachePut(value = "children", key = "#result.userName")
     public ChildDTO saveChild(ChildDTO childDTO) {
+        long studentCount = childRepository.countByClassTeacherId(childDTO.getClassTeacherId());
+        if (studentCount >= 50) {
+            throw new IllegalStateException("Maximum 50 students per ClassTeacher exceeded.");
+        }
         Child child = convertToEntity(childDTO);
         child = childRepository.save(child);
         return convertToDTO(child);

@@ -1,7 +1,6 @@
 package com.example.schoolproject.controller;
 
-import com.example.schoolproject.dto.ScoreDTO;
-import com.example.schoolproject.dto.SubjectAvgDTO;
+import com.example.schoolproject.dto.*;
 import com.example.schoolproject.model.Child;
 import com.example.schoolproject.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,6 @@ public class ScoreController {
         return ResponseEntity.ok(scores);
     }
 
-    @GetMapping("/children")
-    public ResponseEntity<List<ScoreDTO>> getScoresByChildren(@RequestParam List<Child> children) {
-        List<ScoreDTO> scores = scoreService.findByChildren(children);
-        return ResponseEntity.ok(scores);
-    }
-
     @GetMapping("/averages")
     public ResponseEntity<List<SubjectAvgDTO>> getAvgScoresPerSubjectPerClass() {
         List<SubjectAvgDTO> averages = scoreService.findAvgScorePerSubjectPerClass();
@@ -43,5 +36,29 @@ public class ScoreController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/cumulative-averages")
+    public ResponseEntity<List<CumulativeAvgDTO>> getCumulativeAverages() {
+        List<CumulativeAvgDTO> averages = scoreService.getCumulativeAverages();
+        return ResponseEntity.ok(averages);
+    }
+
+    @GetMapping("/top3/{subjectName}/{classTeacherId}")
+    public ResponseEntity<List<TopBottomScoreDTO>> getTop3Scores(@PathVariable String subjectName, @PathVariable Long classTeacherId) {
+        List<TopBottomScoreDTO> topScores = scoreService.getTop3ScoresBySubjectAndClass(subjectName, classTeacherId);
+        return ResponseEntity.ok(topScores);
+    }
+
+    @GetMapping("/bottom3/{subjectName}/{classTeacherId}")
+    public ResponseEntity<List<TopBottomScoreDTO>> getBottom3Scores(@PathVariable String subjectName, @PathVariable Long classTeacherId) {
+        List<TopBottomScoreDTO> bottomScores = scoreService.getBottom3ScoresBySubjectAndClass(subjectName, classTeacherId);
+        return ResponseEntity.ok(bottomScores);
+    }
+
+    @GetMapping("/students/{subjectName}/{classTeacherId}")
+    public ResponseEntity<List<StudentScoreDTO>> getStudentsSorted(@PathVariable String subjectName, @PathVariable Long classTeacherId) {
+        List<StudentScoreDTO> students = scoreService.getStudentsBySubjectAndClassSorted(subjectName, classTeacherId);
+        return ResponseEntity.ok(students);
     }
 }

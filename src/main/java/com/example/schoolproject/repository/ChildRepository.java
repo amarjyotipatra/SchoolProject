@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ChildRepository extends JpaRepository<Child, Long> {
 
     Optional<Child> findByUserName(String userName);
+    long countByClassTeacherId(Long classTeacherId);
 }
