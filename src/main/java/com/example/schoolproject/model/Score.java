@@ -1,5 +1,6 @@
 package com.example.schoolproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Score {
 
     @ManyToOne
     @JoinColumn(name = "child_id")
+    @JsonIgnore
     private Child child;
 
     @ManyToOne
