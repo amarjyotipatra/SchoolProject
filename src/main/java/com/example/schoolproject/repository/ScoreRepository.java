@@ -14,6 +14,9 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
 
     List<Score> findByChild(Child child);
 
-    @Query("SELECT new com.example.schoolproject.dto.SubjectAvgDTO(s.subject.subjectName, AVG(s.score)) FROM Score s GROUP BY s.subject.subjectName")
-    List<SubjectAvgDTO> findAvgScorePerSubjet();
+    List<Score> findByChildIn(List<Child> children);
+
+    @Query("SELECT new com.example.schoolproject.dto.SubjectAvgDTO(s.subject.subjectName, AVG(s.score), s.child.classTeacher.id) " +
+            "FROM Score s GROUP BY s.subject.subjectName, s.child.classTeacher.id")
+    List<SubjectAvgDTO> findAvgScorePerSubjectPerClass();
 }

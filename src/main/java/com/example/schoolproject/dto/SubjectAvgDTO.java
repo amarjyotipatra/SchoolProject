@@ -8,5 +8,16 @@ import lombok.Setter;
 public class SubjectAvgDTO {
 
     private String subjectName;
-    private Double avgScore;
+    private double avgScore;
+    private Long classTeacherId;
+
+    public SubjectAvgDTO() {
+    }
+
+    // Constructor matching the query
+    public SubjectAvgDTO(String subjectName, Double avgScore, Long classTeacherId) {
+        this.subjectName = subjectName;
+        this.avgScore = avgScore;
+        this.classTeacherId = classTeacherId;
+    }
 }
