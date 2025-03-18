@@ -38,7 +38,6 @@ public class PrincipalService {
         principal.setId(dto.getId());
         principal.setName(dto.getName());
         principal.setRole(dto.getRole());
-        // Note: userName and password should be set separately (e.g., via authentication)
         return principal;
     }
 }

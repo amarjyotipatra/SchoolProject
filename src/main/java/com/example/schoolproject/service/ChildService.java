@@ -38,7 +38,6 @@ public class ChildService {
         Child child = new Child();
         child.setId(dto.getId());
         child.setName(dto.getName());
-        // Note: classTeacher should be set via a ClassTeacher entity, not just ID
         child.setRole(dto.getRole());
         return child;
     }

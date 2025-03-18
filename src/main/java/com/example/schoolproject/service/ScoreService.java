@@ -54,7 +54,6 @@ public class ScoreService {
         Score score = new Score();
         score.setId(dto.getId());
         score.setScore(dto.getScore());
-        // Note: child and subject need to be set via entities, not just IDs
         return score;
     }
 }
