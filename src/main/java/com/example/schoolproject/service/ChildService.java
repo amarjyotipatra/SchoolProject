@@ -4,6 +4,8 @@ import com.example.schoolproject.dto.ChildDTO;
 import com.example.schoolproject.model.Child;
 import com.example.schoolproject.repository.ChildRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,11 +16,13 @@ public class ChildService {
     @Autowired
     private ChildRepository childRepository;
 
+    @Cacheable(value = "children", key = "#userName")
     public Optional<ChildDTO> findByUserName(String userName) {
         return childRepository.findByUserName(userName)
                 .map(this::convertToDTO);
     }
 
+    @CachePut(value = "children", key = "#result.userName")
     public ChildDTO saveChild(ChildDTO childDTO) {
         Child child = convertToEntity(childDTO);
         child = childRepository.save(child);
