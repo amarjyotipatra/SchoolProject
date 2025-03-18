@@ -20,12 +20,4 @@ public class Child extends User implements Serializable {
 
     @OneToMany(mappedBy = "child")
     private List<Score> scores;
-
-    @Override
-    public String toString() {
-        return "Child{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

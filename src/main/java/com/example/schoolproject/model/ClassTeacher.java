@@ -14,14 +14,4 @@ public class ClassTeacher extends User implements Serializable {
 
     @OneToMany(mappedBy = "classTeacher")
     private List<Child> children;
-
-
-    @Override
-    public String toString() {
-        return "ClassTeacher{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
 }

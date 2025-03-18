@@ -14,12 +14,4 @@ import java.io.Serializable;
 @Setter
 public class Principal extends User implements Serializable {
 
-    @Override
-    public String toString() {
-        return "Principal{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
 }
