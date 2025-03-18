@@ -33,6 +33,8 @@ public class PrincipalService {
         PrincipalDTO dto = new PrincipalDTO();
         dto.setId(principal.getId());
         dto.setName(principal.getName());
+        dto.setUserName(principal.getUserName());
+        dto.setPassword(principal.getPassword());
         dto.setRole(principal.getRole());
         return dto;
     }
@@ -41,6 +43,8 @@ public class PrincipalService {
         Principal principal = new Principal();
         principal.setId(dto.getId());
         principal.setName(dto.getName());
+        principal.setUserName(dto.getUserName());
+        principal.setPassword(dto.getPassword());
         principal.setRole(dto.getRole());
         return principal;
     }

@@ -33,6 +33,8 @@ public class ClassTeacherService {
         ClassTeacherDTO dto = new ClassTeacherDTO();
         dto.setId(classTeacher.getId());
         dto.setName(classTeacher.getName());
+        dto.setUserName(classTeacher.getUserName());
+        dto.setPassword(classTeacher.getPassword());
         dto.setRole(classTeacher.getRole());
         return dto;
     }
@@ -41,6 +43,8 @@ public class ClassTeacherService {
         ClassTeacher classTeacher = new ClassTeacher();
         classTeacher.setId(dto.getId());
         classTeacher.setName(dto.getName());
+        classTeacher.setUserName(dto.getUserName());
+        classTeacher.setPassword(dto.getPassword());
         classTeacher.setRole(dto.getRole());
         return classTeacher;
     }

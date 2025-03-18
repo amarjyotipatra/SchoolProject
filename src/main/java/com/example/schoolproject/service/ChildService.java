@@ -33,6 +33,8 @@ public class ChildService {
         ChildDTO dto = new ChildDTO();
         dto.setId(child.getId());
         dto.setName(child.getName());
+        dto.setUserName(child.getUserName());
+        dto.setPassword(child.getPassword());
         dto.setClassTeacherId(child.getClassTeacher() != null ? child.getClassTeacher().getId() : null);
         dto.setRole(child.getRole());
         return dto;
@@ -42,6 +44,8 @@ public class ChildService {
         Child child = new Child();
         child.setId(dto.getId());
         child.setName(dto.getName());
+        child.setUserName(dto.getUserName());
+        child.setPassword(dto.getPassword());
         child.setRole(dto.getRole());
         return child;
     }
