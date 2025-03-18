@@ -3,9 +3,11 @@ package com.example.schoolproject.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class SubjectAvgDTO {
+public class SubjectAvgDTO implements Serializable {
 
     private String subjectName;
     private double avgScore;

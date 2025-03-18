@@ -4,9 +4,11 @@ import com.example.schoolproject.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class PrincipalDTO {
+public class PrincipalDTO implements Serializable {
 
     private Long id;
     private String name;
