@@ -1,14 +1,10 @@
 package com.example.schoolproject.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.io.Serializable;
-
-@Getter
-@Setter
-public class CumulativeAvgDTO implements Serializable {
-    private String category;
-    private String name;
-    private Double average;
+@Data
+public class CumulativeAvgDTO {
+    private Long classTeacherId;
+    private String className;
+    private Double avgScore;
 }

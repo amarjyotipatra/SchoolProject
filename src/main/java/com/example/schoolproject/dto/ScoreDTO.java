@@ -1,16 +1,13 @@
 package com.example.schoolproject.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.io.Serializable;
-
-@Getter
-@Setter
-public class ScoreDTO implements Serializable {
-
+@Data
+public class ScoreDTO {
     private Long id;
-    private double score;
+    private Double score;
     private Long childId;
+    private String childName;
     private Long subjectId;
+    private String subjectName;
 }

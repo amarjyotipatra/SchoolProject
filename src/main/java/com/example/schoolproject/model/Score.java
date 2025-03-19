@@ -1,28 +1,27 @@
 package com.example.schoolproject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
+@Data
 @Entity
-@Getter
-@Setter
-@ToString(exclude = { "child", "subject" })
+@Table(name = "scores")
 public class Score {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double score;
-
-    @ManyToOne
-    @JoinColumn(name = "child_id")
+    
+    private Double score;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "child_id", nullable = false)
     @JsonIgnore
     private Child child;
-
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subject_id", nullable = false)
+    @JsonIgnore
     private Subject subject;
 }

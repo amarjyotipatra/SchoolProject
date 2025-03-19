@@ -1,25 +1,12 @@
 package com.example.schoolproject.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.io.Serializable;
-
-@Getter
-@Setter
-public class SubjectAvgDTO implements Serializable {
-
+@Data
+public class SubjectAvgDTO {
+    private Long subjectId;
     private String subjectName;
-    private double avgScore;
     private Long classTeacherId;
-
-    public SubjectAvgDTO() {
-    }
-
-    // Constructor matching the query
-    public SubjectAvgDTO(String subjectName, Double avgScore, Long classTeacherId) {
-        this.subjectName = subjectName;
-        this.avgScore = avgScore;
-        this.classTeacherId = classTeacherId;
-    }
+    private String classTeacherName;
+    private Double avgScore;
 }

@@ -31,4 +31,11 @@ public class PrincipalController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/chart/cumulative-average")
+    @PreAuthorize("hasRole('PRINCIPAL')")
+    public ResponseEntity<Map<String, Object>> getCumulativeAverageChart() {
+        Map<String, Object> chartData = scoreService.getCumulativeAverageChartData();
+        return ResponseEntity.ok(chartData);
+    }
 }

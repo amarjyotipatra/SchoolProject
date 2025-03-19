@@ -2,7 +2,10 @@ package com.example.schoolproject.service;
 
 import com.example.schoolproject.dto.ChildDTO;
 import com.example.schoolproject.model.Child;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.schoolproject.model.ClassTeacher;
 import com.example.schoolproject.repository.ChildRepository;
+import com.example.schoolproject.repository.ClassTeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,6 +19,12 @@ public class ChildService {
     @Autowired
     private ChildRepository childRepository;
 
+    @Autowired
+    private ClassTeacherRepository classTeacherRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Cacheable(value = "children", key = "#userName")
     public Optional<ChildDTO> findByUserName(String userName) {
         return childRepository.findByUserName(userName)
@@ -23,17 +32,31 @@ public class ChildService {
     }
 
     @Cacheable(value = "children", key = "#userName")
-    public Optional<Child> findChildByUserName(String userName) { // New method
+    public Optional<Child> findChildByUserName(String userName) {
         return childRepository.findByUserName(userName);
     }
 
     @CachePut(value = "children", key = "#result.userName")
     public ChildDTO saveChild(ChildDTO childDTO) {
+        // Validate classTeacherId
+        if (childDTO.getClassTeacherId() == null) {
+            throw new IllegalArgumentException("ClassTeacher ID is required");
+        }
+
         long studentCount = childRepository.countByClassTeacherId(childDTO.getClassTeacherId());
         if (studentCount >= 50) {
             throw new IllegalStateException("Maximum 50 students per ClassTeacher exceeded.");
         }
+
+        Optional<ClassTeacher> classTeacher = classTeacherRepository.findById(childDTO.getClassTeacherId());
+        if (classTeacher.isEmpty()) {
+            throw new IllegalArgumentException("ClassTeacher with ID " + childDTO.getClassTeacherId() + " not found");
+        }
+
         Child child = convertToEntity(childDTO);
+        // Encode password
+        child.setPassword(passwordEncoder.encode(childDTO.getPassword()));
+        child.setClassTeacher(classTeacher.get()); 
         child = childRepository.save(child);
         return convertToDTO(child);
     }
