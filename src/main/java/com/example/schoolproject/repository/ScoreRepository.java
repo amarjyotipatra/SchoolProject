@@ -56,10 +56,6 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
 
     List<Score> findByChildId(Long childId);
 
-    // Find scores by class teacher id
-    @Query("SELECT s FROM Score s WHERE s.child.classTeacher.id = :classTeacherId")
-    List<Score> findByClassTeacherId(@Param("classTeacherId") Long classTeacherId);
-
     // Find average score per subject 
     @Query("SELECT AVG(s.score) FROM Score s WHERE s.subject.id = :subjectId")
     Double findAvgScoreBySubjectId(@Param("subjectId") Long subjectId);
