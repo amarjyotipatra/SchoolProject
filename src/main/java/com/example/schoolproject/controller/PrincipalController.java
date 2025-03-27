@@ -2,10 +2,13 @@ package com.example.schoolproject.controller;
 
 import com.example.schoolproject.dto.PrincipalDTO;
 import com.example.schoolproject.service.PrincipalService;
+import com.example.schoolproject.service.ScoreService; // Import corrected service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DataIntegrityViolationException; // Import for potential exception
+import org.springframework.http.HttpStatus; // Import for HttpStatus
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,9 +21,10 @@ public class PrincipalController {
     private PrincipalService principalService;
 
     @Autowired
-    private Object scoreService;
+    private ScoreService scoreService; // Corrected injection type
 
     @GetMapping("/username/{userName}")
+    @PreAuthorize("hasRole('PRINCIPAL')") // Added PreAuthorize based on other controllers
     public ResponseEntity<PrincipalDTO> getPrincipalByUserName(@PathVariable String userName) {
         Optional<PrincipalDTO> principalDTO = principalService.findByUserName(userName);
         return principalDTO.map(ResponseEntity::ok)
@@ -28,12 +32,20 @@ public class PrincipalController {
     }
 
     @PostMapping
-    public ResponseEntity<PrincipalDTO> createPrincipal(@RequestBody PrincipalDTO principalDTO) {
+    @PreAuthorize("hasRole('PRINCIPAL')") // Added PreAuthorize for consistency
+    public ResponseEntity<?> createPrincipal(@RequestBody PrincipalDTO principalDTO) {
+        // Password should be encoded in the service layer before saving
         try {
             PrincipalDTO savedPrincipal = principalService.savePrincipal(principalDTO);
-            return ResponseEntity.ok(savedPrincipal);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedPrincipal); // Use 201 Created
+        } catch (DataIntegrityViolationException e) {
+             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
+        } catch (IllegalArgumentException e) {
+             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            // Log the exception e.g., using SLF4j logger
+            // log.error("Error creating principal: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred during principal creation.");
         }
     }
 

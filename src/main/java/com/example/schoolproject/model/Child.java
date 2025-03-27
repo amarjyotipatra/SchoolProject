@@ -1,28 +1,23 @@
 package com.example.schoolproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
-@ToString(exclude = { "classTeacher", "scores" })
-public class Child extends User implements Serializable {
-
-    @ManyToOne
-    @JoinColumn(name = "classteacher_id")
-    @JsonIgnore
+@Table(name = "children")
+public class Child extends User {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_teacher_id")
     private ClassTeacher classTeacher;
-
-    @OneToMany(mappedBy = "child")
-    private List<Score> scores = new ArrayList<>();
+    
     public Child() {
         setRole(Role.CHILD);
     }

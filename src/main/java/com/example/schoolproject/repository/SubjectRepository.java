@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-    Optional<Subject> findByName(String name);
+    // Renamed method to match the field name 'subjectName' in the Subject class
+    Optional<Subject> findBySubjectName(String subjectName);
 }
