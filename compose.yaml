@@ -1,0 +1,68 @@
+services:
+  school-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: school-app-image
+    container_name: school-app-container
+    ports:
+      # --- CHANGE HERE ---
+      # Map host port 8081 to the container's exposed/application port 8081
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy # Wait for mysql healthcheck to pass
+      redis:
+        condition: service_healthy # Wait for redis healthcheck to pass
+    environment:
+      # These correctly override the application.properties values inside the container
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/schoolproject
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root12345
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      # SERVER_PORT env var is not strictly needed here as the app reads 8081
+      # from application.properties inside the JAR. Setting it wouldn't hurt, though.
+      # - SERVER_PORT=8081
+    networks:
+      - school-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    ports:
+      - "3306:3306" # Optional: Expose to host if needed for direct access
+    environment:
+      - MYSQL_ROOT_PASSWORD=root12345
+      - MYSQL_DATABASE=schoolproject
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot12345"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7
+    container_name: redis-container
+    ports:
+      - "6379:6379" # Optional: Expose to host if needed for direct access
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mysql-data:
+
+networks:
+  school-network:
+    driver: bridge
